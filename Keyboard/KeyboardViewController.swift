@@ -38,10 +38,6 @@ class KeyboardViewController: UIInputViewController {
     override func updateViewConstraints() {
         super.updateViewConstraints()
     }
-    
-    override func loadView() {
-        self.view = UIView(frame: UIScreen.mainScreen().applicationFrame)
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,59 +49,47 @@ class KeyboardViewController: UIInputViewController {
         border.backgroundColor = UIColor(red: 210.0/255, green: 205.0/255, blue: 193.0/255, alpha: 1)
         self.view.addSubview(border)
         
-        shiftKey = KeyButton(frame: CGRect(x: 2.0, y: CGFloat(topPadding + (keyHeight + rowSpacing) * 2), width:shiftWidth, height:shiftHeight))
+        var thirdRowTopPadding: CGFloat = topPadding + (keyHeight + rowSpacing) * 2
+        shiftKey = KeyButton(frame: CGRect(x: 2.0, y: thirdRowTopPadding, width:shiftWidth, height:shiftHeight))
         shiftKey!.addTarget(self, action: Selector("shiftKeyPressed:"), forControlEvents: .TouchUpInside)
         shiftKey!.selected = true
         shiftKey!.setImage(UIImage(named: "shift.png"), forState:.Normal)
         shiftKey!.setImage(UIImage(named: "shift-selected.png"), forState:.Selected)
         self.view.addSubview(shiftKey!)
         
-        deleteKey = KeyButton(frame: CGRect(x:320 - shiftWidth - 2.0, y: CGFloat(topPadding + (keyHeight + rowSpacing) * 2), width:shiftWidth, height:shiftHeight))
+        deleteKey = KeyButton(frame: CGRect(x:320 - shiftWidth - 2.0, y: thirdRowTopPadding, width:shiftWidth, height:shiftHeight))
         deleteKey!.addTarget(self, action: Selector("deleteKeyPressed:"), forControlEvents: .TouchUpInside)
         deleteKey!.setImage(UIImage(named: "delete.png"), forState:.Normal)
         deleteKey!.setImage(UIImage(named: "delete-selected.png"), forState:.Highlighted)
         self.view.addSubview(deleteKey!)
         
-        var frame : CGRect = CGRectZero
-        frame.origin.x = 320.0 - spaceWidth
-        frame.origin.y = topPadding + keyHeight * 3 + rowSpacing * 2 + 10
-        frame.size.width = spaceWidth
-        frame.size.height = spaceHeight
-        spaceKey = KeyButton(frame: frame)
+        var bottomRowTopPadding = topPadding + keyHeight * 3 + rowSpacing * 2 + 10
+        spaceKey = KeyButton(frame: CGRect(x:(320.0 - spaceWidth) / 2, y: bottomRowTopPadding, width:spaceWidth, height:spaceHeight))
         spaceKey!.setTitle(" ", forState: .Normal)
         spaceKey!.addTarget(self, action: Selector("keyPressed:"), forControlEvents: .TouchUpInside)
         self.view.addSubview(spaceKey!)
         
-        frame.origin.x = 2
-        frame.origin.y = topPadding + keyHeight * 3 + rowSpacing * 2 + 10
-        frame.size.width = nextWidth
-        frame.size.height = spaceHeight
-        
-        nextKeyboardButton = KeyButton(frame:frame)
+        nextKeyboardButton = KeyButton(frame:CGRect(x:2, y: bottomRowTopPadding, width:nextWidth, height:spaceHeight))
         nextKeyboardButton!.titleLabel.font = UIFont(name: "HelveticaNeue-Light", size:18)
         nextKeyboardButton!.setTitle(NSLocalizedString("Next", comment: "Title for 'Next Keyboard' button"), forState: .Normal)
         nextKeyboardButton!.addTarget(self, action: "advanceToNextInputMode", forControlEvents: .TouchUpInside)
         view.addSubview(self.nextKeyboardButton!)
         
-        frame.origin.x = 320 - nextWidth - 2
-        frame.origin.y = topPadding + keyHeight * 3 + rowSpacing * 2 + 10
-        frame.size.width = nextWidth
-        frame.size.height = spaceHeight
-        returnButton = KeyButton(frame: frame)
+        returnButton = KeyButton(frame: CGRect(x:320 - nextWidth - 2, y: bottomRowTopPadding, width:nextWidth, height:spaceHeight))
         returnButton!.setTitle(NSLocalizedString("Ret", comment: "Title for 'Return Key' button"), forState:.Normal)
         returnButton!.titleLabel.font = UIFont(name: "HelveticaNeue-Light", size:18)
         returnButton!.addTarget(self, action: "returnKeyPressed:", forControlEvents: .TouchUpInside)
         self.view.addSubview(returnButton!)
         
         var y: CGFloat = topPadding
+        var width = UIScreen.mainScreen().applicationFrame.size.width
         for row in rows {
-            var width = self.view.frame.size.width
             var x: CGFloat = ceil((width - (CGFloat(row.count) - 1) * (keySpacing + keyWidth) - keyWidth) / 2.0)
             for label in row {
                 let button = KeyButton(frame: CGRect(x: x, y: y, width: keyWidth, height: keyHeight))
                 button.setTitle(label.uppercaseString, forState: .Normal)
                 button.addTarget(self, action: Selector("keyPressed:"), forControlEvents: UIControlEvents.TouchUpInside)
-                button.autoresizingMask = .FlexibleWidth | .FlexibleLeftMargin | .FlexibleRightMargin
+                //button.autoresizingMask = .FlexibleWidth | .FlexibleLeftMargin | .FlexibleRightMargin
                 button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 1, bottom: 0, right: 0)
                 
                 self.view.addSubview(button)
