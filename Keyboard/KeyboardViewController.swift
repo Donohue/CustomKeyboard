@@ -70,14 +70,14 @@ class KeyboardViewController: UIInputViewController {
         self.view.addSubview(spaceKey!)
         
         nextKeyboardButton = KeyButton(frame:CGRect(x:2, y: bottomRowTopPadding, width:nextWidth, height:spaceHeight))
-        nextKeyboardButton!.titleLabel.font = UIFont(name: "HelveticaNeue-Light", size:18)
+        nextKeyboardButton!.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size:18)
         nextKeyboardButton!.setTitle(NSLocalizedString("Next", comment: "Title for 'Next Keyboard' button"), forState: .Normal)
         nextKeyboardButton!.addTarget(self, action: "advanceToNextInputMode", forControlEvents: .TouchUpInside)
         view.addSubview(self.nextKeyboardButton!)
         
         returnButton = KeyButton(frame: CGRect(x:320 - nextWidth - 2, y: bottomRowTopPadding, width:nextWidth, height:spaceHeight))
         returnButton!.setTitle(NSLocalizedString("Ret", comment: "Title for 'Return Key' button"), forState:.Normal)
-        returnButton!.titleLabel.font = UIFont(name: "HelveticaNeue-Light", size:18)
+        returnButton!.titleLabel?.font = UIFont(name: "HelveticaNeue-Light", size:18)
         returnButton!.addTarget(self, action: "returnKeyPressed:", forControlEvents: .TouchUpInside)
         self.view.addSubview(returnButton!)
         
@@ -150,14 +150,14 @@ class KeyboardViewController: UIInputViewController {
     
     func keyPressed(sender: UIButton) {
         var proxy = self.textDocumentProxy as UITextDocumentProxy
-        if spacePressed && sender.titleLabel.text == " " {
+        if spacePressed && sender.titleLabel?.text == " " {
             proxy.deleteBackward()
             proxy.insertText(". ")
             spacePressed = false
         }
         else {
-            proxy.insertText(sender.titleLabel.text)
-            spacePressed = sender.titleLabel.text == " "
+            proxy.insertText(sender.titleLabel?.text ?? "")
+            spacePressed = sender.titleLabel?.text == " "
             if spacePressed {
                 spaceTimer?.invalidate()
                 spaceTimer = NSTimer.scheduledTimerWithTimeInterval(1,
@@ -184,15 +184,15 @@ class KeyboardViewController: UIInputViewController {
         if shiftKey?.selected != shiftVal {
             shiftKey!.selected = shiftVal
             for button in buttons {
-                var text = button.titleLabel.text
+                var text = button.titleLabel?.text
                 if shiftKey!.selected {
-                    text = text.uppercaseString
+                    text = text?.uppercaseString
                 } else {
-                    text = text.lowercaseString
+                    text = text?.lowercaseString
                 }
                 
                 button.setTitle(text, forState: UIControlState.Normal)
-                button.titleLabel.sizeToFit()
+                button.titleLabel?.sizeToFit()
             }
         }
     }
