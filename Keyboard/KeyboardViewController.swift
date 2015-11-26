@@ -49,7 +49,7 @@ class KeyboardViewController: UIInputViewController {
         border.backgroundColor = UIColor(red: 210.0/255, green: 205.0/255, blue: 193.0/255, alpha: 1)
         self.view.addSubview(border)
         
-        var thirdRowTopPadding: CGFloat = topPadding + (keyHeight + rowSpacing) * 2
+        let thirdRowTopPadding: CGFloat = topPadding + (keyHeight + rowSpacing) * 2
         shiftKey = KeyButton(frame: CGRect(x: 2.0, y: thirdRowTopPadding, width:shiftWidth, height:shiftHeight))
         shiftKey!.addTarget(self, action: Selector("shiftKeyPressed:"), forControlEvents: .TouchUpInside)
         shiftKey!.selected = true
@@ -63,7 +63,7 @@ class KeyboardViewController: UIInputViewController {
         deleteKey!.setImage(UIImage(named: "delete-selected.png"), forState:.Highlighted)
         self.view.addSubview(deleteKey!)
         
-        var bottomRowTopPadding = topPadding + keyHeight * 3 + rowSpacing * 2 + 10
+        let bottomRowTopPadding = topPadding + keyHeight * 3 + rowSpacing * 2 + 10
         spaceKey = KeyButton(frame: CGRect(x:(320.0 - spaceWidth) / 2, y: bottomRowTopPadding, width:spaceWidth, height:spaceHeight))
         spaceKey!.setTitle(" ", forState: .Normal)
         spaceKey!.addTarget(self, action: Selector("keyPressed:"), forControlEvents: .TouchUpInside)
@@ -82,7 +82,7 @@ class KeyboardViewController: UIInputViewController {
         self.view.addSubview(returnButton!)
         
         var y: CGFloat = topPadding
-        var width = UIScreen.mainScreen().applicationFrame.size.width
+        let width = UIScreen.mainScreen().applicationFrame.size.width
         for row in rows {
             var x: CGFloat = ceil((width - (CGFloat(row.count) - 1) * (keySpacing + keyWidth) - keyWidth) / 2.0)
             for label in row {
@@ -102,7 +102,7 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func returnKeyPressed(sender: UIButton) {
-        var proxy = self.textDocumentProxy as UITextDocumentProxy
+        let proxy = self.textDocumentProxy as UITextDocumentProxy
         proxy.insertText("\n")
         numCharacters++
         shiftPosArr[shiftPosArr.count - 1]++
@@ -116,7 +116,7 @@ class KeyboardViewController: UIInputViewController {
     
     func deleteKeyPressed(sender: UIButton) {
         if numCharacters > 0 {
-            var proxy = self.textDocumentProxy as UITextDocumentProxy
+            let proxy = self.textDocumentProxy as UITextDocumentProxy
             proxy.deleteBackward()
             numCharacters--
             var charactersSinceShift = shiftPosArr[shiftPosArr.count - 1]
@@ -149,7 +149,7 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func keyPressed(sender: UIButton) {
-        var proxy = self.textDocumentProxy as UITextDocumentProxy
+        let proxy = self.textDocumentProxy as UITextDocumentProxy
         if spacePressed && sender.titleLabel?.text == " " {
             proxy.deleteBackward()
             proxy.insertText(". ")
@@ -197,15 +197,15 @@ class KeyboardViewController: UIInputViewController {
         }
     }
 
-    override func textWillChange(textInput: UITextInput) {
+    override func textWillChange(textInput: UITextInput?) {
         // The app is about to change the document's contents. Perform any preparation here.
     }
 
-    override func textDidChange(textInput: UITextInput) {
+    override func textDidChange(textInput: UITextInput?) {
         // The app has just changed the document's contents, the document context has been updated.
     
         var textColor: UIColor
-        var proxy = self.textDocumentProxy as UITextDocumentProxy
+        let proxy = self.textDocumentProxy as UITextDocumentProxy
         if proxy.keyboardAppearance == UIKeyboardAppearance.Dark {
             textColor = UIColor.whiteColor()
         } else {
